@@ -1,0 +1,11 @@
+.meals {
+  display: block;
+}
+
+.meals ul {
+  list-style: none;
+}
+
+.meals li {
+  font-size: 1rem;
+}
