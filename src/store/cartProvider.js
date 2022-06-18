@@ -9,19 +9,18 @@ const CartRducer = (state, action) => {
   if (action.type === "ADD") {
     let UpdateCardItems;
     const UpdateTotalAmount =
-      state.TotalAmount + action.item.price * action.item.amount;
-
-    const FindExsitItemIndex = state.items.findIndex(
+      state.TotalAmount + action.item.amount * action.item.price;
+    const FindIndexExsitItem = state.items.findIndex(
       (i) => i.id === action.item.id
     );
-    const ExsitItemCard = state.items[FindExsitItemIndex];
-    if (ExsitItemCard) {
-      let UpdateItem = {
-        ...ExsitItemCard,
-        amount: ExsitItemCard.amount + action.item.amount,
+    const ExsitItemCart = state.items[FindIndexExsitItem];
+    if (ExsitItemCart) {
+      let updateItem = {
+        ...ExsitItemCart,
+        amount: ExsitItemCart.amount + action.item.amount,
       };
       UpdateCardItems = [...state.items];
-      UpdateCardItems[FindExsitItemIndex] = UpdateItem;
+      UpdateCardItems[FindIndexExsitItem] = updateItem;
     } else {
       UpdateCardItems = state.items.concat(action.item);
     }
@@ -31,20 +30,21 @@ const CartRducer = (state, action) => {
       TotalAmount: UpdateTotalAmount,
     };
   }
-  if (action.type == "REMOVE") {
+  if (action.type === "REMOVE") {
     let UpdateCardItems;
-    const FindExsitingIndex = state.items.findIndex((i) => i.id === action.id);
-    const ExsitingItem = state.items[FindExsitingIndex];
-    const UpdateTotalAmount = state.TotalAmount - ExsitingItem.price;
-    if (ExsitingItem.amount === 1) {
+    const FindIndexExsitItem = state.items.findIndex((i) => i.id === action.id);
+    const ExsitItemCart = state.items[FindIndexExsitItem];
+    const UpdateTotalAmount = state.TotalAmount - ExsitItemCart.price;
+
+    if (ExsitItemCart.amount === 1) {
       UpdateCardItems = state.items.filter((i) => i.id !== action.id);
     } else {
       let UpdateItem = {
-        ...ExsitingItem,
-        amount: ExsitingItem.amount - 1,
+        ...ExsitItemCart,
+        amount: ExsitItemCart.amount - 1,
       };
       UpdateCardItems = [...state.items];
-      UpdateCardItems[FindExsitingIndex] = UpdateItem;
+      UpdateCardItems[FindIndexExsitItem] = UpdateItem;
     }
 
     return {
