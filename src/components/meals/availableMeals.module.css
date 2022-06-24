@@ -10,6 +10,26 @@
   margin: 0;
   padding: 0;
 }
+.loading-mask {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  /* background-color: rgba(0, 0, 0, 0.25); */
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1000;
+  background-size: 200px;
+}
+.Loading {
+  text-align: center;
+  color: #fff;
+}
+.ErrorHttp {
+  text-align: center;
+  color: red;
+}
 
 @keyframes meals-appear {
   from {
