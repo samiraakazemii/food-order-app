@@ -8,7 +8,10 @@ import UseHttp from "../../hooks/use-http";
 
 const Cart = ({ onClose }) => {
   const { isLoading, error, RequestHttp: PostOrder } = UseHttp();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   const [chekOut, setchekOut] = useState(false);
+
   const CartCtx = useContext(CartContext);
   const TotalAmount = `$${CartCtx.TotalAmount.toFixed(2)}`;
   const ItemLength = CartCtx.items.length > 0;
@@ -24,6 +27,7 @@ const Cart = ({ onClose }) => {
   };
 
   const ConfirmUserData = (data) => {
+    setIsSubmitting(true);
     PostOrder({
       url: "https://food-order-46fef-default-rtdb.firebaseio.com/orders.json",
       method: "POST",
@@ -32,6 +36,9 @@ const Cart = ({ onClose }) => {
         orderedItems: CartCtx.items,
       },
     });
+    setIsSubmitting(false);
+    setDidSubmit(true);
+    CartCtx.clearCart();
   };
 
   const CartItems = (
@@ -47,27 +54,47 @@ const Cart = ({ onClose }) => {
       ))}
     </ul>
   );
+
   return (
-    <Modal onClose={onClose}>
-      {CartItems}
-      <div className={style.Total}>
-        <span>Total Amount</span>
-        <span>{TotalAmount}</span>
-      </div>
-      {chekOut && <CheckOut onClose={onClose} onConfirm={ConfirmUserData} />}
-      {!chekOut && (
-        <div className={style.action}>
-          <button className={style["button--alt"]} onClick={onClose}>
-            Close
-          </button>
-          {ItemLength && (
-            <button onClick={ConfirmHandler} className={style.button}>
-              Order
-            </button>
-          )}
-        </div>
-      )}
-    </Modal>
+    <>
+      <Modal onClose={onClose}>
+        {!isSubmitting && !didSubmit && (
+          <>
+            {CartItems}
+            <div className={style.Total}>
+              <span>Total Amount</span>
+              <span>{TotalAmount}</span>
+            </div>
+            {chekOut && (
+              <CheckOut onClose={onClose} onConfirm={ConfirmUserData} />
+            )}
+            {!chekOut && (
+              <div className={style.action}>
+                <button className={style.button} onClick={onClose}>
+                  Close
+                </button>
+                {ItemLength && (
+                  <button onClick={ConfirmHandler} className={style.button}>
+                    Order
+                  </button>
+                )}
+              </div>
+            )}
+          </>
+        )}
+        {isSubmitting && <p>Sending order data...</p>}
+        {!isSubmitting && didSubmit && (
+          <div>
+            <p>Successfully sent the order!</p>
+            <div className={style.action}>
+              <button className={style.button} onClick={onClose}>
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
+    </>
   );
 };
 
