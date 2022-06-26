@@ -7,14 +7,22 @@ const UseHttp = () => {
 
   const RequestHttp = useCallback(async (reqconfig, applyData) => {
     try {
+      let data;
       setIsLoading(true);
       setError(null);
-      const { data } = await axios(reqconfig.url, {
-        method: reqconfig.method ? "GET" : "",
-        headers: reqconfig.headers ? reqconfig.headers : {},
-        body: reqconfig.body ? reqconfig.body : null,
-      });
-      applyData(data);
+      if (reqconfig.method === "POST") {
+        data = await axios.post(reqconfig.url, {
+          headers: reqconfig.headers ? reqconfig.headers : {},
+          data: reqconfig.data ? reqconfig.data : null,
+        });
+      } else {
+        data = await axios.get(reqconfig.url, {
+          headers: reqconfig.headers ? reqconfig.headers : {},
+          data: reqconfig.data ? reqconfig.data : null,
+        });
+      }
+
+      applyData?.(data);
     } catch (err) {
       if (err.response) {
         // The client was given an error response (5xx, 4xx)

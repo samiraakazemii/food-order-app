@@ -4,39 +4,13 @@ import MealsItem from "./mealsItem/mealsItem";
 import UseHttp from "../../hooks/use-http";
 import loadingGif from "../../assets/Loading.gif";
 import style from "./availableMeals.module.css";
-// const DUMMY_MEALS = [
-//   {
-//     id: "m1",
-//     name: "Sushi",
-//     description: "Finest fish and veggies",
-//     price: 22.99,
-//   },
-//   {
-//     id: "m2",
-//     name: "Schnitzel",
-//     description: "A german specialty!",
-//     price: 16.5,
-//   },
-//   {
-//     id: "m3",
-//     name: "Barbecue Burger",
-//     description: "American, raw, meaty",
-//     price: 12.99,
-//   },
-//   {
-//     id: "m4",
-//     name: "Green Bowl",
-//     description: "Healthy...and green...",
-//     price: 18.99,
-//   },
-// ];
 
 const AvailableMeals = () => {
   const { isLoading, error, RequestHttp: FetchMeals } = UseHttp();
   const [Meals, setMeals] = useState([]);
 
   useEffect(() => {
-    const TransformData = (data) => {
+    const TransformData = ({ data }) => {
       let dataArray = [];
       for (const key in data) {
         dataArray.push({
@@ -60,26 +34,6 @@ const AvailableMeals = () => {
   const MealsList = Meals.map((meal) => (
     <MealsItem key={meal.id} meals={meal} />
   ));
-
-  // if (isLoading) {
-  //   return (
-  //     <>
-  //       <p className={style.Loading}>Loading...</p>
-  //       <img
-  //         className={style["loading-mask"]}
-  //         src={loadingGif}
-  //         alt="wait until the page loads"
-  //       />
-  //     </>
-  //   );
-  // }
-  // if (error) {
-  //   return (
-  //     <>
-  //       <p className={style.ErrorHttp}>{error}</p>
-  //     </>
-  //   );
-  // }
 
   return (
     <>
